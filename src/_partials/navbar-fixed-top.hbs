@@ -23,12 +23,12 @@ component: navbar
             {{/each}}
         {{/is}}{{/each}}
           <!-- doesnt work like it should -->
-        <li class="dropdown"><a href="/" class="dropdown-toggle" data-toggle="dropdown">Issues <b class="caret"></b></a>
+        <li class="dropdown"><a href="{{assets}}" class="dropdown-toggle" data-toggle="dropdown">Issues <b class="caret"></b></a>
           <ul class="dropdown-menu">
                  {{#each tags}}
             {{#is tag "issue"}}
             {{#each pages}}
-<li><a href="/issues/{{data.issue}}/">{{data.title}}</a></li>
+<li><a href="{{assets}}issues/{{data.issue}}/">{{data.title}}</a></li>
           {{/each}}
           {{/is}}
           {{/each}}
