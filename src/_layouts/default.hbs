@@ -15,18 +15,14 @@
 		<!-- build:css(src) {{assets}}styles/vendor.css -->
 		<link rel="stylesheet" href="{{assets}}_bower_components/bootstrap/dist/css/bootstrap.css">
 		<!-- endbuild -->
-		<!-- build:css(src) {{assets}}styles/main.css -->
-		<link rel="stylesheet" href="{{assets}}styles/main.css">
+		<!-- build:css(src) {{assets}}styles/style.css -->
+		<link rel="stylesheet" href="{{assets}}styles/style.css">
 		<!-- endbuild -->
 		<!-- build:js(src) {{assets}}scripts/vendor/modernizr.js -->
 		<script src="{{assets}}_bower_components/modernizr/modernizr.js"></script>
 		<!-- endbuild -->
 	</head>
-	<body>
-		<!--[if lt IE 10]>
-			<p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
-		<![endif]-->
-
+	<body data-spy="scroll" data-target="#section-menu-2">
 		<!-- Menu -->
 		{{> navbar-fixed-top }}
 
@@ -38,9 +34,14 @@
 		<script src="{{assets}}_bower_components/jquery/jquery.js"></script>
     <script src="{{assets}}_bower_components/angular/angular.js"></script>
     <script src="{{assets}}_bower_components/angular-bootstrap/ui-bootstrap-tpls.js"></script>
+		<script src="{{assets}}_bower_components/bootstrap/js/scrollspy.js"></script>
+		<script src="{{assets}}_bower_components/bootstrap/js/holder.js"></script>
+		<script src="{{assets}}_bower_components/bootstrap/js/affix.js"></script>
+
 		<!-- endbuild -->
 
 		<!-- Google Analytics -->
+<!--
 		<script>
 			(function(b,o,i,l,e,r){b.GoogleAnalyticsObject=l;b[l]||(b[l]=
 			function(){(b[l].q=b[l].q||[]).push(arguments)});b[l].l=+new Date;
@@ -49,6 +50,7 @@
 			r.parentNode.insertBefore(e,r)}(window,document,'script','ga'));
 			ga('create','{{site.ga}}');ga('send','pageview');
 		</script>
+-->
 
     <!-- build:js(src) {{assets}}scripts/main.js -->
     <script src="{{assets}}scripts/main.js"></script>

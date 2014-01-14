@@ -1,4 +1,4 @@
-title: <%= package.name %>
+title: PresenTense Magazine Archives
 url: './'
 company: <%= package.author %>
 ga: 'UA-XXXXX-X'

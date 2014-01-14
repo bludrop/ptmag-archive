@@ -1,0 +1,25 @@
+---
+component: navbar
+---
+
+<!--				<div id="section-menu">
+					<div class="list-group affix" style="position: absolute; width: 90%;">
+					  <a class="list-group-item active" href="#features">Features</a>
+					  <a class="list-group-item" href="#here-and-now">Here and Now</a>
+					  <a class="list-group-item" href="#arts">Arts</a>
+					</div>
+				</div>-->
+
+			<div id="section-menu-2">
+				<ul class="nav nav-pills nav-stacked" data-spy="affix" data-offset-top="800">
+                    <!-- make this dynamic -->
+                    {{#each sections.sectionsn}}
+                    {{#if @first}} {{! what is wrong? }}
+                    <li class="active"><a href="#{{slugify .}}">{{this}}</a></li>
+                    {{else}}
+                   <li><a href="#{{slugify .}}">{{this}}</a></li>
+                    {{/if}}
+                    {{/each}}
+                </ul>
+			</div>
+

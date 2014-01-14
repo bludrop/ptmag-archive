@@ -1,0 +1,25 @@
+body {
+/*
+    background: #fafafa;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    color: #333;
+*/
+    margin-top: 30px;
+}
+
+footer#bottom {
+	padding-top: 40px;
+	padding-bottom: 30px;
+	margin-top: 100px;
+	color: #777;
+	text-align: center;
+	border-top: 1px solid #e5e5e5;
+}
+
+.media.list-group-item{
+    		margin-top: 0;
+    	}
+
+#section-menu-2 .nav.affix{
+    top: 70px;
+}

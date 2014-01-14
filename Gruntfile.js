@@ -36,11 +36,14 @@ module.exports = function (grunt) {
       assemble: {
         files: [
           '<%= assemble.pages.src %>',
-          '<%= assemble.options.layoutdir %>/*.hbs',
+          '<%= assemble.issues.src %>',
+//          '<%= assemble.articles.src %>',
+          '<%= build.src %>/issues/**/*.md',
+            '<%= assemble.options.layoutdir %>/*.hbs',
           '<%= assemble.options.data %>',
           '<%= assemble.options.partials %>'
         ],
-        tasks: ['clean:out','assemble:pages'],
+        tasks: ['clean:out','assemble:pages','assemble:issues','assemble:articles'],
         options: { livereload: true }
       }
     },
@@ -52,7 +55,7 @@ module.exports = function (grunt) {
           hostname: 'localhost',
           base: ['<%= build.src %>','<%= build.out %>','test'],
           livereload: true,
-          open: true
+          open: false
         }
       }
     },
@@ -63,7 +66,13 @@ module.exports = function (grunt) {
         partials: '<%= build.src %>/_partials/*.hbs',
         layoutdir: '<%= build.src %>/_layouts',
         data: ['<%= build.src %>/_data/*.{json,yml}', 'package.json'],
-        assets: '<%= build.out %>/'
+        assets: '<%= build.out %>/',
+        helpers: ['handlebars-helper-slugify', 'helper-compose', 'handlebars-helper-post', 'foo/*.js'],
+        plugins: ['assemble-contrib-contextual','assemble-permalink','handlebars-helper-autolink'],
+          contextual: {
+          dest: 'tmp/'
+        }
+
       },
       pages: {
         options: {
@@ -71,8 +80,27 @@ module.exports = function (grunt) {
         },
         expand: true,
         cwd: '<%= build.src %>/',
-        src: ['**/*.hbs','!_*/**'],
+        src: ['*.hbs','!_*/**','!index.hbs'],
         dest: '<%= build.out %>/'
+      },
+        //something is not 100% correct here
+       issues: {
+        options: {
+          layout: 'issue.hbs',
+        },
+        expand: true,
+        cwd: '<%= build.src %>/issues/',
+        src: ['../index.hbs','**/index.hbs','!_*/**'], //only do index.hbs
+        dest: '<%= build.out %>/issues/'
+      },
+        articles: {
+        options: {
+          layout: 'article.hbs'
+        },
+        expand: true,
+        cwd: '<%= build.src %>/issues/',
+        src: ['**/*.md','!**/intro.md'],
+        dest: '<%= build.out %>/issues/'
       }
     },
 

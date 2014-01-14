@@ -2,41 +2,43 @@
 layout: default.hbs
 title: <%= site.title %>
 ---
+<section class="jumbotron">
 
-<div class="jumbotron">
-  <div class="container">
+    <h1>PresenTense Magazine</h1>
+    <a href="/magazine"><img width="300" height="63" align="middle" alt="PRESENTENSE Magazine" src="http://presentense.org/files/ptmaglogo-300px.png" /></a>
 
-{{#markdown}}
-# {{site.title}}
-## A template for building a static site using [bower](http://bower.io/), [grunt](http://gruntjs.com/), and various grunt tasks, including [assemble](http://assemble.io/).
-{{/markdown}}
+        <p class="lead">Use this document as a way to quickly start any new project.<br> All you get is this text and a mostly barebones HTML document.</p>
 
-    <p><a href="https://github.com/Hypercubed/assemble-bootstrap-template" class="btn btn-primary btn-lg">View on github</a></p>
-  </div>
-</div>
 
-<div class="container" ng-init="alerts = [{ type: 'success', msg: 'Well done! You now have angularjs and angular-bootstrap.' }]">
-  <alert ng-repeat="alert in alerts" type="alert.type" close="alerts.splice($index, 1)">\{{alert.msg}}</alert>
-</div>
+</section><!-- /.container -->
 
-<div class="container">
-  <div class="page-content">
-    <div class="row">
-      <div class="col-md-5">
-        <br /><iframe src="http://lab.lepture.com/github-cards/card.html?user=Hypercubed&repo=assemble-bootstrap-template" frameborder="0" scrolling="0" width="400" height="300" allowtransparency></iframe>
-      </div>
-      <div class="col-md-4">
+    <section class="container">
+    	<div class="row">
+        {{#each tags}}
+            {{#is tag "issue"}}
+            {{#each pages}}
 
-{{#markdown}}
-## Features
-- Build tasks managed using <a href="http://gruntjs.com/">Grunt</a>
-- Preview server with LiveReload using [grunt-contrib-connect](https://github.com/gruntjs/grunt-contrib-connect).
-- HTML generated from [handelbars](http://handlebarsjs.com/) templates using [Assemble](http://assemble.io/).
-- JS and CSS concatenation and minifications using [grunt-usemin](https://github.com/yeoman/grunt-usemin)
-- Front-end components managed using [Bower](http://bower.io/).
-- Base template using [Bootstrap 3.0](http://getbootstrap.com/), [Angularjs](http://angularjs.org/), and [angular-ui-bootstrap](angular-ui.github.io/bootstrap/)
-{{/markdown}}
+	        <div class="col-sm-6 col-md-4">
+	          <div class="thumbnail">
+		          <div class="caption">
+		            <h3><a href="/issues/{{data.issue}}/">{{data.title}}</a></h3>
+		          </div>
+                  {{#if data.cover}}
+                    <img src="{{data.cover}}" alt="Issue {{data.issue}} cover" style="width: 300px; height: 400px;">
+                  {{else}}
+		          <img data-src="holder.js/300x400" alt="300x400" style="width: 300px; height: 400px;">
+                  {{/if}}
+<!--
+		          <div class="caption">
+		          	<p>Cras justo odio, dapibus ac facilisis in, egestas eget quam. Donec id elit non mi porta gravida at eget metus. Nullam id dolor id nibh ultricies vehicula ut id elit.
+		          	</p>
+		          </div>
+-->
 
-    </div>
-  </div>
-</div>
+	          </div>
+	        </div>
+             {{/each}}
+            {{/is}}
+        {{/each}}
+
+    </section><!-- /.container -->

@@ -1,0 +1,18 @@
+---
+layout: default.hbs
+---
+
+<article class="container">
+    <header class="container">
+        <div class="page-header">
+            <h1><a href="{{autolink}}">{{title}}</a> <small>{{subhead}}</small></h1>
+            <p><address><a href="#">{{author}}</a></address></p>
+            <p><a href="issue_bootstrap.html">Issue {{issue}}</a></p>
+        </div>
+    </header>
+
+    <img src="{{article_image}}" class="pull-right" />
+
+    {{> body }}
+
+</article>
