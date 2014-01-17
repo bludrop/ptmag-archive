@@ -7,143 +7,137 @@ module.exports = function (grunt) {
 
   grunt.initConfig({
 
-    build: {
-      src: 'src',
-      out: 'out',
-      dist: 'dist'
-    },
+    // Project metadata
+    site: grunt.file.readYAML('_config.yml'),
+    bower: grunt.file.readJSON('.bowerrc').directory,
+    pkg: grunt.file.readJSON('package.json'),
+
 
     shell: {
-      options: {
-        stdout: true
-      },
+      options: {stdout: true},
       npm: {
         command: 'npm install'
       },
       bower: {
         command: 'node ./node_modules/bower/bin/bower install'
-      },
+      }
     },
 
     watch: {
+      options: {livereload: true},
       src: {
-        files: [
-          '<%= build.src %>/**/*.{html,htm,js,css}',
-          'test/**/*.{html,htm,js,css}'
-        ],
-        options: { livereload: true }
+        // No tasks are defined in this target, so these won't
+        // trigger anything to build
+        files: ['<%= site.src %>/**/*.{html,htm,js,css}', 'test/**/*.{html,htm,js,css}']
       },
       assemble: {
         files: [
           '<%= assemble.pages.src %>',
           '<%= assemble.issues.src %>',
-//          '<%= assemble.articles.src %>',
-          '<%= build.src %>/issues/**/*.md',
-            '<%= assemble.options.layoutdir %>/*.hbs',
-          '<%= assemble.options.data %>',
-          '<%= assemble.options.partials %>'
+          // '<%= assemble.articles.src %>',
+          '<%= site.src %>/issues/**/*.md',
+          '<%= site.layouts %>/*.hbs',
+          '<%= site.data %>',
+          '<%= site.partials %>'
         ],
-        tasks: ['clean:out','assemble:pages','assemble:issues','assemble:articles'],
-        options: { livereload: true }
+        tasks: ['clean:out', 'assemble:pages', 'assemble:issues', 'assemble:articles']
       }
     },
 
+
     connect: {
+      options: {
+        port: 9000,
+        livereload: true,
+        hostname: 'localhost'
+      },
       devserver: {
         options: {
-          port: 9000,
-          hostname: 'localhost',
-          base: ['<%= build.src %>','<%= build.out %>','test'],
-          livereload: true,
-          open: false
+          open: false,
+          base: ['<%= site.src %>', '<%= site.dest %>', 'test']
         }
       }
     },
+
 
     assemble: {
       options: {
         flatten: false,
-        partials: '<%= build.src %>/_partials/*.hbs',
-        layoutdir: '<%= build.src %>/_layouts',
-        data: ['<%= build.src %>/_data/*.{json,yml}', 'package.json'],
-        assets: '<%= build.out %>/',
-        helpers: ['handlebars-helper-slugify', 'helper-compose', 'handlebars-helper-post', 'foo/*.js'],
-        plugins: ['assemble-contrib-contextual','assemble-permalink','handlebars-helper-autolink'],
-          contextual: {
+        assets: '<%= site.assets %>/',
+
+        // Metadata
+        pkg: '<%= pkg %>',
+        site: '<%= site %>',
+        data: ['<%= site.data %>'],
+
+        // Templates
+        partials: ['<%= site.partials %>/*.hbs'],
+        layoutdir: '<%= site.layouts %>',
+
+        // Extensions
+        helpers: ['<%= site.helpers %>'],
+        plugins: ['<%= site.plugins %>'],
+        contextual: {
           dest: 'tmp/'
         }
-
       },
       pages: {
-        options: {
-          layout: 'page.hbs',
-        },
+        options: {layout: 'page.hbs'},
         expand: true,
-        cwd: '<%= build.src %>/',
-        src: ['*.hbs','!_*/**','!index.hbs'],
-        dest: '<%= build.out %>/'
+        cwd: '<%= site.src %>',
+        src: ['*.hbs', '!_*/**', '!index.hbs'],
+        dest: '<%= site.dest %>/'
       },
-        //something is not 100% correct here
-       issues: {
-        options: {
-          layout: 'issue.hbs',
-        },
+      //something is not 100% correct here
+      issues: {
+        options: {layout: 'issue.hbs'},
         expand: true,
-        cwd: '<%= build.src %>/issues/',
-        src: ['../index.hbs','**/index.hbs','!_*/**'], //only do index.hbs
-        dest: '<%= build.out %>/issues/'
+        cwd: '<%= site.src %>/issues',
+        src: ['../index.hbs', '**/index.hbs', '!_*/**'], //only do index.hbs
+        dest: '<%= site.dest %>/issues/'
       },
-        articles: {
-        options: {
-          layout: 'article.hbs'
-        },
+      articles: {
+        options: {layout: 'article.hbs'},
         expand: true,
-        cwd: '<%= build.src %>/issues/',
-        src: ['**/*.md','!**/intro.md'],
-        dest: '<%= build.out %>/issues/'
+        cwd: '<%= site.src %>/issues',
+        src: ['**/*.md', '!**/intro.md'],
+        dest: '<%= site.dest %>/issues/'
       }
     },
 
     clean: {
       options: { force: false },
-      out: ['<%= build.out %>/*']
+      out: ['<%= site.dest %>/*']
     },
 
     copy: {
-      src: {
+      source: {
         expand: true,
-        cwd: '<%= build.src %>/',
-        src: [
-          '**',
-          '!**/*.hbs',
-          '!_*/**',
-          '.htaccess'
-        ],
-        dest: '<%= build.out %>/'
+        cwd: '<%= site.src %>/',
+        src: ['**', '!**/*.hbs', '!_*/**', '.htaccess'],
+        dest: '<%= site.dest %>/'
       },
       fonts: {
         expand: true,
-        cwd: '<%= build.src %>/_bower_components/bootstrap/fonts/',
-        src: [
-          '**',
-        ],
-        dest: '<%= build.out %>/fonts/'
+        cwd: '<%= bower %>/bootstrap/fonts/',
+        src: ['**'],
+        dest: '<%= site.dest %>/fonts/'
       }
     },
 
     useminPrepare: {
       options: {
-        dest: '<%= build.out %>'
+        dest: '<%= site.dest %>'
       },
-      html: '<%= build.out %>/index.html'
+      html: '<%= site.dest %>/index.html'
     },
 
     usemin: {
       options: {
-        dirs: ['<%= build.out %>']
+        dirs: ['<%= site.dest %>']
       },
-      html: ['<%= build.out %>/**/*.html'],
-      css: ['<%= build.out %>/styles/**/*.css']
+      html: ['<%= site.dest %>/**/*.html'],
+      css: ['<%= site.dest %>/styles/**/*.css']
     },
 
     htmlmin: {
@@ -161,9 +155,9 @@ module.exports = function (grunt) {
         },
         files: [{
           expand: true,
-          cwd: '<%= build.out %>',
+          cwd: '<%= site.dest %>',
           src: '**/*.html',
-          dest: '<%= build.out %>'
+          dest: '<%= site.dest %>'
         }]
       }
     },
@@ -172,9 +166,9 @@ module.exports = function (grunt) {
     //  dist: {
     //    files: [{
     //      expand: true,
-    //      cwd: '<%= build.src %>/images',
+    //      cwd: '<%= site.src %>/images',
     //      src: '**/*.{png,jpg,jpeg,gif,webp}',
-    //      dest: '<%= build.out %>/images'
+    //      dest: '<%= site.dest %>/images'
     //    }]
     //  }
     //},
@@ -183,9 +177,9 @@ module.exports = function (grunt) {
     //  dist: {
     //    files: [{
     //      expand: true,
-    //      cwd: '<%%= build.src %>/images',
+    //      cwd: '<%%= site.src %>/images',
     //      src: '{,*/}*.svg',
-    //      dest: '<%%= build.out %>/images'
+    //      dest: '<%%= site.dest %>/images'
     //    }]
     //  }
     //},
@@ -201,8 +195,8 @@ module.exports = function (grunt) {
     rev: {
       files: {
         src: [
-          '<%= build.out %>/scripts/{,*/}*.js',
-          '<%= build.out %>/styles/{,*/}*.css'
+          '<%= site.dest %>/scripts/{,*/}*.js',
+          '<%= site.dest %>/styles/{,*/}*.css'
         ]
       }
     },
@@ -210,7 +204,7 @@ module.exports = function (grunt) {
     //less: {
     //  styles: {
     //    files: {
-    //      '<%= build.out %>/styles/**/*.*': ['<%= build.src %>/styles/**/*.less']
+    //      '<%= site.dest %>/styles/**/*.*': ['<%= site.src %>/styles/**/*.less']
     //    }
     //  }
     //},
@@ -231,17 +225,16 @@ module.exports = function (grunt) {
 
     rsync: {
       options: {
-        args: ["--verbose","--delete"],
+        args: ["--verbose", "--delete"],
         recursive: true
       },
       dist: {
-          options: {
-            src: "<%= build.out %>/",
-            dest: "<%= build.dist %>"
-          }
+        options: {
+          src: "<%= site.dest %>/",
+          dest: "<%= site.dist %>"
+        }
       }
     },
-
     mocha: {
       all: {
         options: {
@@ -254,11 +247,14 @@ module.exports = function (grunt) {
 
   });
 
-  grunt.registerTask('install', ['shell:npm','shell:bower']);
 
+  grunt.registerTask('install', ['shell:npm', 'shell:bower']);
+  grunt.registerTask('server', ['connect:devserver', 'watch']);
+  grunt.registerTask('run', ['clean', 'assemble', 'server']);
+
+  // Build
+  grunt.registerTask('run:build', ['build', 'server']);
   grunt.registerTask('build', [
-    'clean',
-    'assemble',
     'copy',
     //'imagemin',
     'useminPrepare',
@@ -270,21 +266,13 @@ module.exports = function (grunt) {
     'htmlmin'
   ]);
 
-  grunt.registerTask('test', [
-      'clean',
-      'assemble',
-      'connect:devserver',
-      'mocha'
-  ]);
+  // Deploy
+  grunt.registerTask('deploy:rsync', ['build', 'rsync']);
+  grunt.registerTask('deploy', ['build', 'gh-pages']);
 
-  grunt.registerTask('server', ['connect:devserver','watch']);
-  grunt.registerTask('run', ['clean','assemble','server']);
-  grunt.registerTask('run:build', ['build','server']);
+  // Tests to be run
+  grunt.registerTask('test', ['assemble', 'connect:devserver', 'mocha']);
 
-  grunt.registerTask('deploy:rsync', ['build','rsync']);
-  grunt.registerTask('deploy:gh-pages', ['build','gh-pages']);
-
-  grunt.registerTask('deploy', ['deploy:gh-pages']);
-  grunt.registerTask('default', ['run']);
-
+  // The default task to be run with the `grunt` command
+  grunt.registerTask('default', ['clean', 'test', 'build']);
 };
