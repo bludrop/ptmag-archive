@@ -1,64 +1,67 @@
 ---
 layout: default.hbs
-issuename: <%= data.issue %>
+issuename: <%= issue %>
 currentdir: 'src/issues/<%= issue %>/.*md'
 custominfo: custom text
 ---
 
 <section id="issue" class="container">
-		<header class="container">
-			<h1 class="page-header">{{title}} <small>{{description}}</small></h1>
+  <header class="container">
+    <h1 class="page-header">{{title}}
+      <small>{{description}}</small>
+    </h1>
+    <div class="row">
+      <div class="col-md-6">
+        <img class="thumbnail square" width="500" height="670" alt="{{title}} cover" src="{{cover}}" />
+      </div>
+      <div class="col-md-6">
+        <div class="well">
+          {{> body }}
+        </div>
+      </div>
+    </div>
+  </header>
 
-			<div class="row">
-				<div class="col-md-6">
-					<img class="thumbnail square" width="500" height="670" alt="{{title}} cover" src="{{cover}}" />
-				</div>
-				<div class="col-md-6">
+  <h2>Inside this issue:</h2>
 
-					<div class="well">
-                        {{> body }}
-                    </div>
-				</div>
-			</div>
-		</header>
+  <div class="row">
+    <div class="col-md-4">
+      {{> navbar-sections }}
+    </div>
+    <div class="col-md-8">
 
-		<h2>Inside this issue:</h2>
+      {{#each sections.sectionsn}}
+        <div id="{{slugify .}}" class="panel panel-default">
+          <div class="panel-heading">
+            <h3 class="text-center">{{.}}</h3>
+          </div>
+          <!-- List group -->
+          <ul class="list-group media-list">
 
-		<div class="row">
-			<div class="col-md-4">
-                {{> navbar-sections }}
-            </div>
-			<div class="col-md-8">
-                {{#each sections.sectionsn}}
+            {{#compose src="src/issues/**/*.md"}}
+              {{#is ../. section}}
+                {{#is ../../../issue issue}}
+                <li class="media list-group-item">
+                  <a class="pull-left" href="{{../filename}}.html">
+                    <img class="media-object" src="{{article_image}}" alt="article thumbnail" style="width:150px;height:100px;">
+                  </a>
+                  <div class="media-body">
+                    <h4 class="media-heading"><a href="{{slugify title}}.html">{{title}}</a>
+                    </h4>
+                    <h5>{{subhead}}</h5>
+                    <p class="author"><a href="/magazine/tova-serkin">{{author}}</a>
+                    </p>
+                  </div>
+                </li>
+                {{/is}}
+              {{/is}}
+            {{/compose}}
 
-                <div id="{{slugify .}}" class="panel panel-default">
-				  <div class="panel-heading"><h3 class="text-center">{{.}}</h3></div>
-				  <!-- List group -->
-					<ul class="list-group media-list">
-
-                    {{#compose 'src/issues/**/*.md' }}
-                        {{#is ../. section}}
-                        {{#is ../../../issue issue }}
-
-                        <li class="media list-group-item">
-					    <a class="pull-left" href="{{../filename}}.html">
-					      <img class="media-object" src="{{article_image}}" alt="article thumbnail" style="width:150px;height:100px;">
-					    </a>
-					    <div class="media-body">
-					      <h4 class="media-heading"><a href="{{slugify title}}.html">{{title}}</a></h4>
-					      <h5>{{subhead}}</h5>
-					      <p class="author"><a href="/magazine/tova-serkin">{{author}}</a></p>
-					    </div>
-					  </li>
-                    {{/is}}
-                        {{/is}}
-                    {{/compose}}
+          </ul>
+        </div> <!-- /.panel -->
+      {{/each}}
 
 
-					</ul>
-				</div><!-- /.panel -->
-                {{/each}}
-		</div>
-		</div>
-
-    </section>
+    </div>
+  </div>
+</section>
