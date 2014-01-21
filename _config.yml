@@ -13,7 +13,8 @@ assets:           <%= site.dest %>/
 
 # Metadata
 date:             <%= new Date() %>
-data:             data/*.{json,yml}
+# data:           data/*.{json,yml}  -- different option
+data:             <%= site.src %>/_data/*.{json,yml}
 
 # Templates
 templates:        <%= site.src %>
@@ -24,8 +25,14 @@ layout:           default
 
 # Extensions
 helpers:          <%= site.src %>/helpers/*.js
+#helpers:
+#  - handlebars-helper-slugify
+#  - handlebars-helper-compose
+#  - handlebars-helper-post
 plugins:
   - assemble-contrib-contextual
+  - assemble-permalink
+  - handlebars-helper-autolink
 
 # Theme
 styles:           styles
