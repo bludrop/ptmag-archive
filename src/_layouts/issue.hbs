@@ -1,7 +1,6 @@
 ---
 layout: default.hbs
 issuename: <%= issue %>
-currentdir: 'src/issues/<%= issue %>/.*md'
 custominfo: custom text
 ---
 
@@ -39,17 +38,20 @@ custominfo: custom text
           <ul class="list-group media-list">
 
             {{#compose src="src/issues/**/*.md"}}
-              {{#is ../. section}}
-                {{#is ../../../issue issue}}
+
+
+              {{! #compose cwd="<%= site.src %>/issues/**/" src="*.md" }}
+              {{#is ../. @section}}
+                {{#is ../../../issue @issue}}
                 <li class="media list-group-item">
                   <a class="pull-left" href="{{../filename}}.html">
-                    <img class="media-object" src="{{article_image}}" alt="article thumbnail" style="width:150px;height:100px;">
+                    <img class="media-object" src="{{@article_image}}" alt="article thumbnail" style="width:150px;height:100px;">
                   </a>
                   <div class="media-body">
-                    <h4 class="media-heading"><a href="{{slugify title}}.html">{{title}}</a>
+                    <h4 class="media-heading"><a href="{{slugify @title}}.html">{{@title}}</a>
                     </h4>
-                    <h5>{{subhead}}</h5>
-                    <p class="author"><a href="/magazine/tova-serkin">{{author}}</a>
+                    <h5>{{@subhead}}</h5>
+                    <p class="author"><a href="/magazine/tova-serkin">{{@author}}</a>
                     </p>
                   </div>
                 </li>
