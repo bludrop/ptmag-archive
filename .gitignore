@@ -4,3 +4,4 @@ src/_bower_components
 *.bak
 dist/
 tmp
+search_index.json
